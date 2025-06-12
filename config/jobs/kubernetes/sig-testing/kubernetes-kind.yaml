@@ -284,6 +284,11 @@ presubmits:
       timeout: 60m
       grace_period: 15m
     path_alias: k8s.io/kubernetes
+    extra_refs:
+    - org: kubernetes
+      repo: test-infra
+      base_ref: master
+      path_alias: "k8s.io/test-infra"
     spec:
       containers:
       - image: gcr.io/k8s-staging-test-infra/krte:v20250527-1b2b10e804-master
@@ -291,7 +296,7 @@ presubmits:
         - wrapper.sh
         - bash
         - -c
-        - curl -sSL https://kind.sigs.k8s.io/dl/latest/linux-amd64.tgz | tar xvfz - -C "${PATH%%:*}/" && e2e-k8s.sh
+        - curl -sSL https://kind.sigs.k8s.io/dl/latest/linux-amd64.tgz | tar xvfz - -C "${PATH%%:*}/" && $GOPATH/src/k8s.io/test-infra/experiment/kubelet-serving-certificates/e2e-k8s.sh
         env:
         # EventedPLEG is disabled temporarily for https://github.com/kubernetes/kubernetes/issues/122721
         - name: FEATURE_GATES
